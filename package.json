@@ -1,5 +1,5 @@
 {
-    "name": "@pxe/foldb",
+    "name": "foldb",
     "version": "1.0.0-alpha.1",
     "description": "Folder database",
     "main": "index.js",
