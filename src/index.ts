@@ -80,7 +80,7 @@ class FoldDB {
                 const id = randomUUID();
                 json[collectionName][oldID].id = id;
 
-                await fs.appendFile(
+                await fs.writeFile(
                     path.join(collectionPath, id),
                     JSON.stringify(json[collectionName][oldID])
                 );
@@ -187,7 +187,7 @@ class FoldDB {
             }
 
             static async findOne(opts: { item?: any, except?: boolean }) {
-                return Collection.find({ count: 1, ...opts }) as unknown as Promise<FoldDB.Item<T>>;
+                return Collection.find({ count: 1, ...opts }).then(v => v[0]) as Promise<FoldDB.Item<T>>;
             }
 
             static async update(opts: { id: string, value: T, override?: boolean }) {
