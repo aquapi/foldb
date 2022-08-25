@@ -164,6 +164,7 @@ class FoldDB {
 
             static async find(opts: { item?: any; count?: number; except?: boolean; }) {
                 const listItems = [];
+                opts.except = !!opts.except;
 
                 for await (const id of Collection.ids) {
                     if (opts.count === 0)

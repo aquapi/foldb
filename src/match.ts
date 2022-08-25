@@ -5,17 +5,18 @@
  * @returns 
  */
 function match(a: any, b: any) {
-    if (a == b)
+    if (!a || a === b)
         return true;
 
-    else if (typeof a === "object") {
+    if (typeof a === "object") {
         for (const key in a) 
             if (!match(a[key], b[key]))
                 return false;
         
         return true;
-    } else
-        return false;
+    } 
+        
+    return false;
 }
 
 export = match;
