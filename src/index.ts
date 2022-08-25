@@ -66,6 +66,30 @@ class FoldDB {
         this.path = path;
     }
 
+    static async from(json: object, dir: string) {
+        if (!existsSync(dir))
+            await fs.mkdir(dir);
+
+        for (const collectionName in json) {
+            const collectionPath = path.join(dir, collectionName);
+
+            if (!existsSync(collectionPath))
+                await fs.mkdir(collectionPath);
+
+            for (const oldID in json[collectionName]) {
+                const id = randomUUID();
+                json[collectionName][oldID].id = id;
+
+                await fs.appendFile(
+                    path.join(collectionPath, id),
+                    JSON.stringify(json[collectionName][oldID])
+                );
+            }
+        }
+
+        return new FoldDB(dir);
+    }
+
     async clear() {
         return clearDir(this.path);
     }
@@ -171,7 +195,7 @@ class FoldDB {
 
                 if (typeof item.data === "object")
                     Object.assign(item.data, opts.value);
-                else    
+                else
                     // @ts-ignore
                     item.data = opts.value;
 
