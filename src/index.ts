@@ -167,11 +167,8 @@ class FoldDB {
                 opts.except = !!opts.except;
 
                 for await (const id of Collection.ids) {
-                    if (opts.count === 0)
+                    if (opts.count === listItems.length)
                         break;
-
-                    if (typeof opts.count === "number")
-                        --opts.count;
 
                     const item = await Collection.select(id) as FoldDB.Item<T>;
 
