@@ -1,6 +1,6 @@
 {
     "name": "foldb",
-    "version": "1.0.0-alpha.4-test.1",
+    "version": "1.0.0-alpha.5",
     "description": "Folder database",
     "main": "index.js",
     "author": "reve-node",

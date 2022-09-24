@@ -96,10 +96,21 @@ class FoldDB {
 
     async collect<T = any>(name: string, Type: valids.Type): Promise<FoldDB.Collection<T>> {
         const collectionPath = path.join(this.path, name);
-
         if (!existsSync(collectionPath))
             await fs.mkdir(collectionPath);
 
+        return this.#collect<T>(Type, collectionPath);
+    }
+
+    collectSync<T = any>(name: string, Type: valids.Type): FoldDB.Collection<T> {
+        const collectionPath = path.join(this.path, name);
+        if (!existsSync(collectionPath))
+            mkdirSync(collectionPath);
+
+        return this.#collect<T>(Type, collectionPath);
+    }
+
+    #collect<T>(Type: valids.Type, collectionPath: string): FoldDB.Collection<T> {
         return class Collection {
             readonly data: T;
             readonly id: string;
