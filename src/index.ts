@@ -94,23 +94,26 @@ class FoldDB {
         return clearDir(this.path);
     }
 
-    async collect<T = any>(name: string, Type: valids.Type): Promise<FoldDB.Collection<T>> {
+    async collect<T = any>(name: string, Type: valids.Type, generateID?: (data: T) => string): Promise<FoldDB.Collection<T>> {
         const collectionPath = path.join(this.path, name);
         if (!existsSync(collectionPath))
             await fs.mkdir(collectionPath);
 
-        return this.#collect<T>(Type, collectionPath);
+        return this.#collect<T>(Type, collectionPath, generateID);
     }
 
-    collectSync<T = any>(name: string, Type: valids.Type): FoldDB.Collection<T> {
+    collectSync<T = any>(name: string, Type: valids.Type, generateID?: (data: T) => string): FoldDB.Collection<T> {
         const collectionPath = path.join(this.path, name);
         if (!existsSync(collectionPath))
             mkdirSync(collectionPath);
 
-        return this.#collect<T>(Type, collectionPath);
+        return this.#collect<T>(Type, collectionPath, generateID);
     }
 
-    #collect<T>(Type: valids.Type, collectionPath: string): FoldDB.Collection<T> {
+    #collect<T>(Type: valids.Type, collectionPath: string, generateID?: (data: T) => string): FoldDB.Collection<T> {
+        if (!generateID)
+            generateID = () => randomUUID();
+
         return class Collection {
             readonly data: T;
             readonly id: string;
@@ -126,7 +129,7 @@ class FoldDB {
             constructor(data: T) {
                 data = new Type(data);
                 this.data = data;
-                this.id = randomUUID();
+                this.id = generateID(data);
             }
 
             async save() {
