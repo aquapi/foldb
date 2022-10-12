@@ -144,8 +144,12 @@ class FoldDB {
             }
 
             static async select(id: string) {
-                return fs.readFile(path.join(collectionPath, id))
-                    .then(v => JSON.parse(v.toString()))
+                try {
+                    return fs.readFile(path.join(collectionPath, id))
+                        .then(v => JSON.parse(v.toString()));
+                } catch (e) {
+                    return;
+                }
             }
 
             static async del(id: string) {
